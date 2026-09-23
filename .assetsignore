@@ -1,0 +1,3 @@
+# Serve only the landing page; the rest of the repo (and .git) stays private to the build.
+*
+!index.html
