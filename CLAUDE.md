@@ -24,5 +24,5 @@ No Xcode project, package manager, tests, or linter. `build.sh` calls `swiftc` d
 ## Gotchas
 
 - `build.sh` code-signs ad-hoc with an **identifier-based designated requirement** (`com.trash.mac`) so the Accessibility grant survives rebuilds. Don't change the bundle ID or drop that `-r` flag, or users must re-grant permission every build.
-- `.assetsignore` whitelists only `index.html` for the Worker (`assets.directory` is the repo root) — anything else added at root stays private unless explicitly un-ignored.
+- `.assetsignore` whitelists only `index.html` and `icon.png` (its social preview image) for the Worker (`assets.directory` is the repo root) — anything else added at root stays private unless explicitly un-ignored.
 - `ponytail:` comments mark deliberate shortcuts with known limits (e.g. "Put Back" also triggers an animation).
