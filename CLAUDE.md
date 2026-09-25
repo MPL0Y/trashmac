@@ -9,10 +9,9 @@ TrashMac is a macOS menu bar app (single file, `main.swift`) that animates a fil
 ```sh
 ./build.sh                        # universal (arm64 + x86_64) TrashMac.app → build/dmg/, packaged as TrashMac.dmg
 open build/dmg/TrashMac.app       # run without mounting the DMG
-npx wrangler deploy               # deploy landing page to trashmac.agenticrabbit.com
 ```
 
-No Xcode project, package manager, tests, or linter. `build.sh` calls `swiftc` directly and writes `Info.plist` inline; override the SDK with `SDK=... ./build.sh` if the default pick fails. Use the menu bar item's "Test Animation" (⌘T) to exercise the animation without deleting files.
+Pushing to `main` auto-deploys the landing page to trashmac.agenticrabbit.com (Cloudflare Workers Builds). No Xcode project, package manager, tests, or linter. `build.sh` calls `swiftc` directly and writes `Info.plist` inline; override the SDK with `SDK=... ./build.sh` if the default pick fails. Use the menu bar item's "Test Animation" (⌘T) to exercise the animation without deleting files.
 
 ## Architecture (`main.swift`)
 
