@@ -1,10 +1,12 @@
 import Cocoa
 import UniformTypeIdentifiers
+import ServiceManagement
 
 // Watches ~/.Trash; when something lands in it, flies its icon from the cursor into the Dock's Trash.
-final class App: NSObject, NSApplicationDelegate {
+final class App: NSObject, NSApplicationDelegate, NSMenuDelegate {
     let trash = FileManager.default.homeDirectoryForCurrentUser.appendingPathComponent(".Trash").path
     var status: NSStatusItem!
+    var login: NSMenuItem!
     var stream: FSEventStreamRef?
     var windows: [NSWindow] = []
 
@@ -13,12 +15,25 @@ final class App: NSObject, NSApplicationDelegate {
         status.button?.image = NSImage(systemSymbolName: "trash", accessibilityDescription: "TrashMac")
         let menu = NSMenu()
         menu.addItem(withTitle: "Test Animation", action: #selector(test), keyEquivalent: "t").target = self
+        login = menu.addItem(withTitle: "Open at Login", action: #selector(toggleLogin), keyEquivalent: "")
+        login.target = self
+        menu.delegate = self
         menu.addItem(.separator())
         menu.addItem(withTitle: "Quit TrashMac", action: #selector(NSApplication.terminate(_:)), keyEquivalent: "q")
         status.menu = menu
         // Accessibility lets us find the exact Trash icon in the Dock.
         _ = AXIsProcessTrustedWithOptions([kAXTrustedCheckOptionPrompt.takeUnretainedValue() as String: true] as CFDictionary)
         watch()
+    }
+
+    // Read fresh on open: the user can also change this in System Settings → Login Items.
+    func menuWillOpen(_ menu: NSMenu) { login.state = SMAppService.mainApp.status == .enabled ? .on : .off }
+
+    @objc func toggleLogin() {
+        let s = SMAppService.mainApp
+        // Failed or needs the user's OK: send them to Login Items to finish it there.
+        do { try s.status == .enabled ? s.unregister() : s.register() } catch { SMAppService.openSystemSettingsLoginItems() }
+        if s.status == .requiresApproval { SMAppService.openSystemSettingsLoginItems() }
     }
 
     @objc func test() { fly(NSWorkspace.shared.icon(for: .plainText), delay: 0.3) }
