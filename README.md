@@ -14,4 +14,4 @@ Or build it yourself:
 
 The download isn't notarized, so on first launch macOS blocks it: go to System Settings → Privacy & Security and click **Open Anyway**. A copy you build yourself opens without this step.
 
-When the app first opens, give it Accessibility access (System Settings → Privacy & Security). It uses that to find exactly where the Trash icon is in the Dock, and plays a test flight as soon as you allow it. Check for Updates in the menu bar tells you when a new version is out.
+When the app first opens, give it Accessibility access (System Settings → Privacy & Security). It uses that to find exactly where the Trash icon is in the Dock, and plays a test flight as soon as you allow it. Check for Updates in the menu bar tells you when a new version is out. With Homebrew, `brew upgrade trashmac` updates it.
