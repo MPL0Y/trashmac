@@ -298,7 +298,7 @@ section[id]{scroll-margin-top:56px}
     <ol class="steps">
       <li><h3>Download it.</h3><p>Open the DMG and drag TrashMac into Applications.</p></li>
       <li><h3>Open it once.</h3><p>TrashMac isn’t notarized, so macOS stops the first launch. Go to System Settings → Privacy &amp; Security and click Open Anyway.</p></li>
-      <li><h3>Allow Accessibility.</h3><p>That’s how it finds the Trash in your Dock. Then choose Test Animation from the trash icon in the menu bar.</p></li>
+      <li><h3>Allow Accessibility.</h3><p>That’s how it finds the Trash in your Dock. Then choose Test Animation from the trash icon in the menu bar, and Open at Login to keep it running.</p></li>
     </ol>
     <a class="btn" href="https://github.com/MPL0Y/trashmac/releases/latest/download/TrashMac.dmg" data-dl>Download for Mac</a>
     <div class="alt" id="build">
@@ -319,8 +319,8 @@ section[id]{scroll-margin-top:56px}
       <details><summary>Why does it need Accessibility?</summary><p>To ask the Dock where the Trash icon is, so every file lands on it. It reads the Dock’s list of items and nothing else.</p></details>
       <details><summary>Why isn’t it notarized?</summary><p>Notarizing needs a paid Apple developer account. TrashMac is one Swift file you can read on GitHub, or build yourself to skip the warning.</p></details>
       <details><summary>Will it slow my Mac down?</summary><p>No. It waits for something to land in the Trash, draws for half a second, then goes back to waiting.</p></details>
-      <details><summary>Does it start when I log in?</summary><p>Not by itself yet. To keep it running after a restart, add it in System Settings → General → Login Items.</p></details>
-      <details><summary>How do I remove it?</summary><p>Choose Quit TrashMac from its menu bar icon, then drag it from Applications to the Trash. You won’t see this one fly.</p></details>
+      <details><summary>Does it start when I log in?</summary><p>Choose Open at Login from its menu bar icon, and it will be there after every restart.</p></details>
+      <details><summary>How do I remove it?</summary><p>Turn off Open at Login, choose Quit TrashMac, then drag it from Applications to the Trash. You won’t see this one fly.</p></details>
     </div>
   </section>
 
