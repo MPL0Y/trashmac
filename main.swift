@@ -18,6 +18,7 @@ final class App: NSObject, NSApplicationDelegate, NSMenuDelegate {
         login = menu.addItem(withTitle: "Open at Login", action: #selector(toggleLogin), keyEquivalent: "")
         login.target = self
         menu.delegate = self
+        menu.addItem(withTitle: "Check for Updates…", action: #selector(checkForUpdates), keyEquivalent: "").target = self
         menu.addItem(.separator())
         menu.addItem(withTitle: "Quit TrashMac", action: #selector(NSApplication.terminate(_:)), keyEquivalent: "q")
         status.menu = menu
@@ -34,6 +35,36 @@ final class App: NSObject, NSApplicationDelegate, NSMenuDelegate {
         // Failed or needs the user's OK: send them to Login Items to finish it there.
         do { try s.status == .enabled ? s.unregister() : s.register() } catch { SMAppService.openSystemSettingsLoginItems() }
         if s.status == .requiresApproval { SMAppService.openSystemSettingsLoginItems() }
+    }
+
+    // Compares with the latest GitHub release and offers its DMG; no background checks, only when asked.
+    @objc func checkForUpdates() {
+        let api = URL(string: "https://api.github.com/repos/MPL0Y/trashmac/releases/latest")!
+        URLSession.shared.dataTask(with: api) { data, _, _ in
+            let tag = (data.flatMap { try? JSONSerialization.jsonObject(with: $0) } as? [String: Any])?["tag_name"] as? String
+            let latest = tag.map { $0.hasPrefix("v") ? String($0.dropFirst()) : $0 }
+            let current = Bundle.main.infoDictionary?["CFBundleShortVersionString"] as? String ?? "0"
+            DispatchQueue.main.async {
+                let alert = NSAlert()
+                if let latest, latest.compare(current, options: .numeric) == .orderedDescending {
+                    alert.messageText = "TrashMac \(latest) is available"
+                    alert.informativeText = "You have \(current). Download the new version, then replace the app in Applications."
+                    alert.addButton(withTitle: "Download")
+                    alert.addButton(withTitle: "Later")
+                } else if latest != nil {
+                    alert.messageText = "TrashMac is up to date"
+                    alert.informativeText = "You have the latest version, \(current)."
+                } else {
+                    alert.messageText = "Couldn’t check for updates"
+                    alert.informativeText = "Check your internet connection and try again."
+                }
+                // Accessory apps don't come forward on their own, so the alert would open behind other windows.
+                NSApp.activate(ignoringOtherApps: true)
+                if alert.runModal() == .alertFirstButtonReturn, alert.buttons.count == 2 {
+                    NSWorkspace.shared.open(URL(string: "https://github.com/MPL0Y/trashmac/releases/latest/download/TrashMac.dmg")!)
+                }
+            }
+        }.resume()
     }
 
     @objc func test() { fly(NSWorkspace.shared.icon(for: .plainText), delay: 0.3) }
