@@ -2,6 +2,8 @@
 
 A menu bar app that shows a file flying into the Dock's Trash every time you delete something.
 
+[![TrashMac](og.png)](https://trashmac.agenticrabbit.com)
+
 **[Download TrashMac.dmg](https://github.com/MPL0Y/trashmac/releases/latest/download/TrashMac.dmg)** (macOS 13+), or install it with Homebrew:
 
     brew install --cask mpl0y/tap/trashmac
