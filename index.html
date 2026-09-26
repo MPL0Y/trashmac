@@ -113,7 +113,8 @@ h1{font-size:clamp(44px,8vw,88px);line-height:1.02;letter-spacing:-.035em;backgr
 /* Figures */
 .figures{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:40px 32px;padding-block:0 var(--gap)}
 .num{font-size:clamp(44px,5.5vw,64px);line-height:1;font-weight:600;letter-spacing:-.035em;background:var(--silver);-webkit-background-clip:text;background-clip:text;color:transparent;padding-bottom:.08em;width:fit-content}
-.num small{font-size:.5em;letter-spacing:-.01em}
+.num small{font-size:.5em;letter-spacing:-.01em;white-space:nowrap}
+.figures>div{padding-left:24px;border-left:1px solid rgba(255,255,255,.1)}
 .figures p{margin:10px 0 0;max-width:26ch;font-size:15px;color:var(--muted)}
 
 /* How it works */
@@ -174,7 +175,11 @@ code{font-family:var(--mono);font-size:.88em;letter-spacing:0}
 
 /* Footer */
 footer{border-top:1px solid rgba(255,255,255,.1)}
-.foot{display:flex;flex-wrap:wrap;justify-content:space-between;gap:8px 24px;padding-block:24px 40px;font-size:12px;letter-spacing:0;color:var(--muted)}
+.foot{display:flex;flex-wrap:wrap;justify-content:space-between;align-items:center;gap:20px 32px;padding-block:32px 48px;font-size:13px;letter-spacing:-.01em;color:var(--muted)}
+.foot-brand{display:flex;align-items:center;gap:12px}
+.foot-brand .ico{flex:none;width:32px;height:32px}
+.foot-brand b{color:var(--text);font-weight:600}
+.foot-links{display:flex;gap:24px}
 .foot p{margin:0}
 .foot a{text-decoration:none}
 .foot a:hover{color:var(--text)}
@@ -198,7 +203,18 @@ footer{border-top:1px solid rgba(255,255,255,.1)}
 }
 [hidden]{display:none!important}
 section[id]{scroll-margin-top:56px}
-@media (prefers-reduced-motion:no-preference){html{scroll-behavior:smooth}}
+#brew{scroll-margin-top:40vh}
+.eyebrow{display:inline-flex;align-items:center;gap:8px;padding:4px 12px 4px 4px;border-radius:980px;border:1px solid var(--edge);background:rgba(255,255,255,.05);font-size:13px;letter-spacing:-.01em;color:rgba(245,245,247,.85);text-decoration:none;transition:background-color .2s}
+.eyebrow:hover{background:rgba(255,255,255,.1);color:#fff}
+.eyebrow b{padding:2px 8px;border-radius:980px;background:var(--accent-fill);color:#fff;font-size:11px;font-weight:600;letter-spacing:.02em}
+@media (prefers-reduced-motion:no-preference){
+  html{scroll-behavior:smooth;interpolate-size:allow-keywords}
+  .reveal{opacity:0;transform:translateY(28px);transition:opacity .8s ease,transform .8s cubic-bezier(.2,.7,.2,1)}
+  .reveal.in{opacity:1;transform:none}
+  /* FAQ answers slide open where the browser can animate to auto height; others just snap. */
+  .faq details::details-content{block-size:0;overflow:hidden;transition:block-size .3s ease,content-visibility .3s allow-discrete}
+  .faq details[open]::details-content{block-size:auto}
+}
 </style>
 </head>
 <body>
@@ -218,6 +234,7 @@ section[id]{scroll-margin-top:56px}
 <main id="top">
   <section class="hero wrap">
     <span class="ico" role="img" aria-label="TrashMac app icon"></span>
+    <a class="eyebrow" href="#brew"><b>New</b>Version 1.3 installs with Homebrew ›</a>
     <h1>Watch it land.</h1>
     <p class="lede">TrashMac flies every file you delete into the Trash in your Dock. <strong>Half a second, then it’s gone.</strong></p>
     <div class="ctas">
@@ -303,7 +320,7 @@ section[id]{scroll-margin-top:56px}
     <div><div class="num">0.5<small> s</small></div><p>From your cursor to the Trash, on an arc that speeds up as it falls.</p></div>
     <div><div class="num">5</div><p>Icons in the air at once when you delete a batch.</p></div>
     <div><div class="num">13+</div><p>macOS 13 or later, native on Apple silicon and Intel.</p></div>
-    <div><div class="num">0 bytes</div><p>Collected. No tracking, no analytics. It goes online only when you click Check for Updates.</p></div>
+    <div><div class="num">0<small> bytes</small></div><p>Collected. Online only when you check for updates.</p></div>
   </section>
 
   <section class="how wrap" id="how">
@@ -338,7 +355,7 @@ section[id]{scroll-margin-top:56px}
     </ol>
     <a class="btn" href="https://github.com/MPL0Y/trashmac/releases/latest/download/TrashMac.dmg" data-dl>Download for Mac</a>
     <p class="brew-label">Or install with Homebrew:</p>
-    <div class="brew"><code><span class="p">$ </span>brew install --cask mpl0y/tap/trashmac</code><button class="copy" type="button" data-cmd="brew install --cask mpl0y/tap/trashmac">Copy</button></div>
+    <div class="brew" id="brew"><code><span class="p">$ </span>brew install --cask mpl0y/tap/trashmac</code><button class="copy" type="button" data-cmd="brew install --cask mpl0y/tap/trashmac">Copy</button></div>
     <div class="alt" id="build">
       <h3>Or build it yourself.</h3>
       <p class="after">One script compiles TrashMac for Apple silicon and Intel and packs it into a DMG. You’ll need the Xcode Command Line Tools. Run <code>xcode-select --install</code> if you don’t have them. A copy you build opens without the Gatekeeper step.</p>
@@ -374,8 +391,15 @@ section[id]{scroll-margin-top:56px}
 
 <footer>
   <div class="wrap foot">
-    <p>TrashMac is open source. Not affiliated with Apple Inc.</p>
-    <a href="https://github.com/MPL0Y/trashmac" target="_blank" rel="noopener">github.com/MPL0Y/trashmac</a>
+    <div class="foot-brand">
+      <span class="ico" aria-hidden="true"></span>
+      <div><p><b>TrashMac 1.3</b> · <a href="https://github.com/MPL0Y/trashmac/releases/latest" target="_blank" rel="noopener">What’s new</a></p><p>Open source. Not affiliated with Apple Inc.</p></div>
+    </div>
+    <nav class="foot-links" aria-label="More">
+      <a href="https://github.com/MPL0Y/trashmac/releases/latest/download/TrashMac.dmg" data-dl>Download</a>
+      <a href="#brew">Homebrew</a>
+      <a href="https://github.com/MPL0Y/trashmac" target="_blank" rel="noopener">GitHub</a>
+    </nav>
   </div>
 </footer>
 
@@ -457,6 +481,14 @@ section[id]{scroll-margin-top:56px}
     trashFile(f);
     await wait(800);
     cursor.animate([{ opacity: 1 }, { opacity: 0 }], { duration: 300, fill: 'forwards' });
+  }
+
+  // Sections below the demo fade up once as they scroll into view.
+  if (!reduce && 'IntersectionObserver' in window) {
+    const ro = new IntersectionObserver(es => es.forEach(e => {
+      if (e.isIntersecting) { e.target.classList.add('in'); ro.unobserve(e.target); }
+    }), { rootMargin: '0px 0px -10% 0px' });
+    document.querySelectorAll('.figures, .how, .build, .faq, .closing').forEach(el => { el.classList.add('reveal'); ro.observe(el); });
   }
 
   // Play one flight the first time the desktop scrolls into view.
