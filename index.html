@@ -146,6 +146,7 @@ code{font-family:var(--mono);font-size:.88em;letter-spacing:0}
 
 /* FAQ */
 .faq{padding-block:0 var(--gap)}
+@media (min-width:900px){.faq{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,2fr);gap:40px;align-items:start}.faq .faq-list{margin-top:0}}
 .faq-list{margin-top:clamp(24px,4vw,40px);max-width:760px}
 .faq details{border-top:1px solid rgba(255,255,255,.1)}
 .faq details:last-child{border-bottom:1px solid rgba(255,255,255,.1)}
@@ -158,7 +159,8 @@ code{font-family:var(--mono);font-size:.88em;letter-spacing:0}
 /* Closing */
 .closing{position:relative;isolation:isolate;display:grid;justify-items:center;gap:20px;text-align:center;padding-block:0 var(--gap)}
 .closing .ico{width:72px;height:72px}
-.closing h2{max-width:none}
+.closing h2{max-width:none;background:var(--silver);-webkit-background-clip:text;background-clip:text;color:transparent;padding-bottom:.06em}
+.closing::before{content:"";position:absolute;z-index:-1;left:50%;top:0;width:min(760px,100%);height:420px;transform:translateX(-50%);background:radial-gradient(closest-side,rgba(41,151,255,.18),transparent);filter:blur(30px);pointer-events:none}
 
 /* Footer */
 footer{border-top:1px solid rgba(255,255,255,.1)}
