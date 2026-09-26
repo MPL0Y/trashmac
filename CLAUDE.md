@@ -24,4 +24,5 @@ Pushing to `main` auto-deploys the landing page to trashmac.agenticrabbit.com (C
 
 - `build.sh` code-signs ad-hoc with an **identifier-based designated requirement** (`com.trash.mac`) so the Accessibility grant survives rebuilds. Don't change the bundle ID or drop that `-r` flag, or users must re-grant permission every build.
 - `.assetsignore` whitelists only `index.html`, `icon.png` (JSON-LD image) and `og.png` (social card) for the Worker (`assets.directory` is the repo root) — anything else added at root stays private unless explicitly un-ignored.
+- **Releasing**: bump `CFBundleShortVersionString` in `build.sh` and `softwareVersion` in `index.html`'s JSON-LD, `./build.sh`, `gh release create vX.Y TrashMac.dmg`, then bump `version` and `sha256` (of the uploaded DMG) in `Casks/trashmac.rb` of the [MPL0Y/homebrew-tap](https://github.com/MPL0Y/homebrew-tap) repo. Check for Updates compares against the latest release's tag, so tags must stay `vX.Y`.
 - `ponytail:` comments mark deliberate shortcuts with known limits (e.g. "Put Back" also triggers an animation).
