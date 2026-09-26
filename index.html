@@ -45,6 +45,9 @@ h1,h2,h3{margin:0;font-weight:600;text-wrap:balance}
 .links{display:flex;gap:clamp(14px,3vw,28px);font-size:13px;letter-spacing:-.01em}
 .links a{color:rgba(245,245,247,.8);text-decoration:none;transition:color .2s}
 .links a:hover{color:#fff}
+.links .nav-cta{display:inline-flex;align-items:center;min-height:24px;padding:0 11px;border-radius:980px;background:var(--accent-fill);color:#fff;font-weight:500;transition:background-color .2s}
+.links .nav-cta:hover{background:var(--accent-fill-hover);color:#fff}
+@media (max-width:520px){.links a:not(.nav-cta){display:none}}
 
 /* Hero */
 .hero{position:relative;isolation:isolate;display:grid;justify-items:center;gap:20px;text-align:center;padding-block:clamp(56px,9vw,104px) clamp(36px,5vw,56px)}
@@ -94,6 +97,7 @@ h1{font-size:clamp(48px,9vw,96px);line-height:1.02;letter-spacing:-.035em;backgr
 .demo-foot p{margin:0}
 .textbtn{appearance:none;background:none;border:0;padding:4px 0;color:var(--accent);font:inherit;cursor:pointer}
 .textbtn:hover{text-decoration:underline}
+.demo-actions{display:flex;gap:20px}
 
 /* Figures */
 .figures{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:40px 32px;padding-block:clamp(24px,4vw,48px)}
@@ -124,6 +128,29 @@ code{font-family:var(--mono);font-size:.88em;letter-spacing:0}
 .term code{font-size:inherit}
 .term .p{color:var(--muted);-webkit-user-select:none;user-select:none}
 .after{margin:0;max-width:60ch;color:var(--muted)}
+.steps{list-style:none;margin:0;padding:0;counter-reset:step;display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:32px 40px;width:100%}
+.steps li{counter-increment:step;display:grid;gap:10px;align-content:start}
+.steps li::before{content:counter(step);font-size:44px;line-height:1;font-weight:600;letter-spacing:-.035em;background:var(--silver);-webkit-background-clip:text;background-clip:text;color:transparent;width:fit-content;padding-bottom:.06em}
+.steps h3{font-size:21px;line-height:1.2;letter-spacing:-.02em}
+.steps p{margin:0;max-width:34ch;color:var(--muted)}
+.alt{display:grid;gap:20px;width:100%;margin-top:clamp(24px,4vw,48px)}
+.alt h3{font-size:21px;letter-spacing:-.02em}
+
+/* FAQ */
+.faq{padding-block:clamp(32px,5vw,64px) clamp(72px,11vw,140px)}
+.faq-list{margin-top:clamp(24px,4vw,40px);max-width:760px}
+.faq details{border-top:1px solid rgba(255,255,255,.1)}
+.faq details:last-child{border-bottom:1px solid rgba(255,255,255,.1)}
+.faq summary{display:flex;justify-content:space-between;align-items:center;gap:16px;padding:20px 0;font-size:19px;font-weight:600;letter-spacing:-.02em;cursor:pointer;list-style:none}
+.faq summary::-webkit-details-marker{display:none}
+.faq summary::after{content:"+";flex:none;font-weight:400;font-size:24px;line-height:1;color:var(--muted);transition:transform .25s}
+.faq details[open] summary::after{transform:rotate(45deg)}
+.faq details p{margin:0;padding:0 0 22px;max-width:60ch;color:var(--muted)}
+
+/* Closing */
+.closing{position:relative;isolation:isolate;display:grid;justify-items:center;gap:20px;text-align:center;padding-block:0 clamp(80px,12vw,150px)}
+.closing .ico{width:72px;height:72px}
+.closing h2{max-width:none}
 
 /* Footer */
 footer{border-top:1px solid rgba(255,255,255,.1)}
@@ -154,8 +181,9 @@ section[id]{scroll-margin-top:56px}
     <a class="brand" href="#top"><span class="ico" aria-hidden="true"></span>TrashMac</a>
     <nav class="links" aria-label="Page">
       <a href="#how">How it works</a>
-      <a href="#build">Build</a>
+      <a href="#install">Install</a>
       <a href="https://github.com/MPL0Y/trashmac" target="_blank" rel="noopener">GitHub</a>
+      <a class="nav-cta" href="https://github.com/MPL0Y/trashmac/releases/latest/download/TrashMac.dmg" data-dl>Download</a>
     </nav>
   </div>
 </header>
@@ -166,10 +194,10 @@ section[id]{scroll-margin-top:56px}
     <h1>Watch it land.</h1>
     <p class="lede">TrashMac flies every file you delete into the Trash in your Dock. <strong>Half a second, then it’s gone.</strong></p>
     <div class="ctas">
-      <a class="btn" href="https://github.com/MPL0Y/trashmac/releases/latest/download/TrashMac.dmg">Download for Mac</a>
-      <a class="more" href="#build">Or build it yourself ›</a>
+      <a class="btn" href="https://github.com/MPL0Y/trashmac/releases/latest/download/TrashMac.dmg" data-dl>Download for Mac</a>
+      <a class="more" href="#install">How to install ›</a>
     </div>
-    <p class="note">Free. macOS 13 or later. The app isn’t notarized, so on first launch go to System Settings → Privacy &amp; Security and click Open Anyway.</p>
+    <p class="note">Free and open source · macOS 13 or later · Apple silicon and Intel</p>
   </section>
 
   <section class="demo wrap" aria-label="Try it">
@@ -230,7 +258,10 @@ section[id]{scroll-margin-top:56px}
     </div>
     <div class="demo-foot">
       <p>Click a file to move it to the Trash.</p>
-      <button class="textbtn" id="putback" type="button" hidden>Put Back</button>
+      <div class="demo-actions">
+        <button class="textbtn" id="trashall" type="button">Trash All</button>
+        <button class="textbtn" id="putback" type="button" hidden>Put Back</button>
+      </div>
     </div>
     <p class="sr" id="live" aria-live="polite"></p>
   </section>
@@ -260,19 +291,46 @@ section[id]{scroll-margin-top:56px}
     </div>
   </section>
 
-  <section class="build wrap" id="build">
+  <section class="build wrap" id="install">
     <div class="build-head">
-      <h2>Build it on your Mac.</h2>
-      <p>One script compiles TrashMac for Apple silicon and Intel and packs it into a DMG. You’ll need macOS 13 or later and the Xcode Command Line Tools. Run <code>xcode-select --install</code> if you don’t have them.</p>
+      <h2>Up and running in a minute.</h2>
     </div>
-    <div class="term">
-      <div class="term-bar"><i></i><i></i><i></i><span>Terminal</span><button class="copy" id="copy" type="button">Copy</button></div>
+    <ol class="steps">
+      <li><h3>Download it.</h3><p>Open the DMG and drag TrashMac into Applications.</p></li>
+      <li><h3>Open it once.</h3><p>TrashMac isn’t notarized, so macOS stops the first launch. Go to System Settings → Privacy &amp; Security and click Open Anyway.</p></li>
+      <li><h3>Allow Accessibility.</h3><p>That’s how it finds the Trash in your Dock. Then choose Test Animation from the trash icon in the menu bar.</p></li>
+    </ol>
+    <a class="btn" href="https://github.com/MPL0Y/trashmac/releases/latest/download/TrashMac.dmg" data-dl>Download for Mac</a>
+    <div class="alt" id="build">
+      <h3>Or build it yourself.</h3>
+      <p class="after">One script compiles TrashMac for Apple silicon and Intel and packs it into a DMG. You’ll need the Xcode Command Line Tools. Run <code>xcode-select --install</code> if you don’t have them. A copy you build opens without the Gatekeeper step.</p>
+      <div class="term">
+        <div class="term-bar"><i></i><i></i><i></i><span>Terminal</span><button class="copy" id="copy" type="button">Copy</button></div>
 <pre><code><span class="p">$ </span>git clone https://github.com/MPL0Y/trashmac.git
 <span class="p">$ </span>cd trashmac &amp;&amp; ./build.sh
 <span class="p">$ </span>open TrashMac.dmg</code></pre>
+      </div>
     </div>
-    <p class="after">Drag TrashMac into Applications and open it. When macOS asks, allow Accessibility. That’s how TrashMac finds the Trash in your Dock. Because you built it yourself, it opens without a Gatekeeper warning.</p>
-    <a class="btn" href="https://github.com/MPL0Y/trashmac" target="_blank" rel="noopener">Open on GitHub</a>
+  </section>
+
+  <section class="faq wrap" id="faq">
+    <h2>Questions.</h2>
+    <div class="faq-list">
+      <details><summary>Why does it need Accessibility?</summary><p>To ask the Dock where the Trash icon is, so every file lands on it. It reads the Dock’s list of items and nothing else.</p></details>
+      <details><summary>Why isn’t it notarized?</summary><p>Notarizing needs a paid Apple developer account. TrashMac is one Swift file you can read on GitHub, or build yourself to skip the warning.</p></details>
+      <details><summary>Will it slow my Mac down?</summary><p>No. It waits for something to land in the Trash, draws for half a second, then goes back to waiting.</p></details>
+      <details><summary>Does it start when I log in?</summary><p>Not by itself yet. To keep it running after a restart, add it in System Settings → General → Login Items.</p></details>
+      <details><summary>How do I remove it?</summary><p>Choose Quit TrashMac from its menu bar icon, then drag it from Applications to the Trash. You won’t see this one fly.</p></details>
+    </div>
+  </section>
+
+  <section class="closing wrap">
+    <span class="ico" aria-hidden="true"></span>
+    <h2>Watch it land on your Mac.</h2>
+    <div class="ctas">
+      <a class="btn" href="https://github.com/MPL0Y/trashmac/releases/latest/download/TrashMac.dmg" data-dl>Download for Mac</a>
+      <a class="more" href="https://github.com/MPL0Y/trashmac" target="_blank" rel="noopener">Star it on GitHub ›</a>
+    </div>
   </section>
 </main>
 
@@ -288,6 +346,7 @@ section[id]{scroll-margin-top:56px}
   const stage = document.getElementById('stage');
   const trash = document.getElementById('trash');
   const putBack = document.getElementById('putback');
+  const trashAll = document.getElementById('trashall');
   const live = document.getElementById('live');
   const files = [...stage.querySelectorAll('.file')];
   const reduce = matchMedia('(prefers-reduced-motion: reduce)').matches;
@@ -322,6 +381,7 @@ section[id]{scroll-margin-top:56px}
       if (!reduce) trash.animate([{ transform: 'scale(1)' }, { transform: 'scale(1.08, .94)' }, { transform: 'scale(1)' }], { duration: 280, easing: 'ease-out' });
       live.textContent = file.getAttribute('aria-label').replace('Move ', 'Moved ') + '.';
       putBack.hidden = false;
+      trashAll.hidden = files.every(f => f.classList.contains('gone'));
     });
   }
 
@@ -332,8 +392,14 @@ section[id]{scroll-margin-top:56px}
     });
   });
 
+  // A batch, staggered 60 ms apart like the app.
+  trashAll.addEventListener('click', () => {
+    files.filter(f => !f.classList.contains('gone')).forEach((f, i) => setTimeout(() => trashFile(f), i * 60));
+  });
+
   putBack.addEventListener('click', () => {
     files.forEach(f => f.classList.remove('gone'));
+    trashAll.hidden = false;
     trash.classList.remove('full');
     putBack.hidden = true;
     live.textContent = 'Files put back.';
@@ -346,6 +412,20 @@ section[id]{scroll-margin-top:56px}
     }, { threshold: 0.6 });
     io.observe(stage);
   }
+
+  // Visitors on a phone can't install a Mac app, so offer to send the link to their Mac instead.
+  const onMac = /Macintosh/.test(navigator.userAgent) && navigator.maxTouchPoints < 2;
+  if (!onMac) document.querySelectorAll('[data-dl]').forEach(a => {
+    const label = a.classList.contains('nav-cta') ? 'Send' : 'Send to my Mac';
+    a.textContent = label;
+    a.addEventListener('click', e => {
+      e.preventDefault();
+      const url = location.origin + '/';
+      const copied = () => { a.textContent = 'Link copied'; setTimeout(() => { a.textContent = label; }, 1800); };
+      if (navigator.share) navigator.share({ title: 'TrashMac', text: 'Watch every deleted file fly into the Trash in your Dock.', url }).catch(() => {});
+      else if (navigator.clipboard) navigator.clipboard.writeText(url).then(copied, () => {});
+    });
+  });
 
   const copy = document.getElementById('copy');
   const cmds = 'git clone https://github.com/MPL0Y/trashmac.git\ncd trashmac && ./build.sh\nopen TrashMac.dmg';
