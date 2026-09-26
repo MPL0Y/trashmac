@@ -17,7 +17,7 @@
 <title>TrashMac – Watch deleted files fly into your Mac’s Trash</title>
 <link rel="canonical" href="https://trashmac.agenticrabbit.com/">
 <script type="application/ld+json">
-{"@context":"https://schema.org","@type":"SoftwareApplication","name":"TrashMac","description":"A free, open-source macOS menu bar app that animates every file you delete flying into the Trash in your Dock.","applicationCategory":"UtilitiesApplication","operatingSystem":"macOS 13 or later","softwareVersion":"1.2","url":"https://trashmac.agenticrabbit.com/","downloadUrl":"https://github.com/MPL0Y/trashmac/releases/latest/download/TrashMac.dmg","image":"https://trashmac.agenticrabbit.com/icon.png","offers":{"@type":"Offer","price":"0","priceCurrency":"USD"},"sameAs":["https://github.com/MPL0Y/trashmac"]}
+{"@context":"https://schema.org","@type":"SoftwareApplication","name":"TrashMac","description":"A free, open-source macOS menu bar app that animates every file you delete flying into the Trash in your Dock.","applicationCategory":"UtilitiesApplication","operatingSystem":"macOS 13 or later","softwareVersion":"1.3","url":"https://trashmac.agenticrabbit.com/","downloadUrl":"https://github.com/MPL0Y/trashmac/releases/latest/download/TrashMac.dmg","image":"https://trashmac.agenticrabbit.com/icon.png","offers":{"@type":"Offer","price":"0","priceCurrency":"USD"},"sameAs":["https://github.com/MPL0Y/trashmac"]}
 </script>
 <style>
 :root{
@@ -321,9 +321,10 @@ section[id]{scroll-margin-top:56px}
     <ol class="steps">
       <li><h3>Download it.</h3><p>Open the DMG and drag TrashMac into Applications.</p></li>
       <li><h3>Open it once.</h3><p>TrashMac isn’t notarized, so macOS stops the first launch. Go to System Settings → Privacy &amp; Security and click Open Anyway.</p></li>
-      <li><h3>Allow Accessibility.</h3><p>That’s how it finds the Trash in your Dock. Then choose Test Animation from the trash icon in the menu bar, and Open at Login to keep it running.</p></li>
+      <li><h3>Allow Accessibility.</h3><p>That’s how it finds the Trash in your Dock, and a test file flies in the moment you allow it. Choose Open at Login from the trash icon in the menu bar to keep it running.</p></li>
     </ol>
     <a class="btn" href="https://github.com/MPL0Y/trashmac/releases/latest/download/TrashMac.dmg" data-dl>Download for Mac</a>
+    <p class="note">Or with Homebrew: <code>brew install --cask mpl0y/tap/trashmac</code></p>
     <div class="alt" id="build">
       <h3>Or build it yourself.</h3>
       <p class="after">One script compiles TrashMac for Apple silicon and Intel and packs it into a DMG. You’ll need the Xcode Command Line Tools. Run <code>xcode-select --install</code> if you don’t have them. A copy you build opens without the Gatekeeper step.</p>
