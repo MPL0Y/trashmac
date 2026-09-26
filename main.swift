@@ -25,6 +25,31 @@ final class App: NSObject, NSApplicationDelegate, NSMenuDelegate {
         // Accessibility lets us find the exact Trash icon in the Dock.
         _ = AXIsProcessTrustedWithOptions([kAXTrustedCheckOptionPrompt.takeUnretainedValue() as String: true] as CFDictionary)
         watch()
+        if !UserDefaults.standard.bool(forKey: "welcomed") {
+            UserDefaults.standard.set(true, forKey: "welcomed")
+            welcome()
+        }
+    }
+
+    // First launch: a menu bar app shows no window, so point at the icon, then fly a test file
+    // as soon as the Dock's Trash can be found, so the first thing people see is it working.
+    func welcome() {
+        let label = NSTextField(wrappingLabelWithString: "TrashMac is running in your menu bar.\nDelete a file and watch it fly into the Trash.")
+        label.preferredMaxLayoutWidth = 260
+        label.frame = CGRect(origin: CGPoint(x: 14, y: 12), size: label.fittingSize)
+        let vc = NSViewController()
+        vc.view = NSView(frame: CGRect(x: 0, y: 0, width: label.frame.width + 28, height: label.frame.height + 24))
+        vc.view.addSubview(label)
+        let pop = NSPopover()
+        pop.contentViewController = vc
+        pop.behavior = .transient
+        NSApp.activate(ignoringOtherApps: true)
+        pop.show(relativeTo: status.button!.bounds, of: status.button!, preferredEdge: .minY)
+        Timer.scheduledTimer(withTimeInterval: 1, repeats: true) { [weak self] t in
+            guard AXIsProcessTrusted() else { return }
+            t.invalidate()
+            self?.test()
+        }
     }
 
     // Read fresh on open: the user can also change this in System Settings → Login Items.
